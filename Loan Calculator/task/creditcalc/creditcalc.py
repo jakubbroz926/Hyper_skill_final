@@ -44,30 +44,17 @@ class Loan:
             print(f"Overpayment = {math.ceil(n * p - principal)}")
 
 
-def check_args(args):#rewrite results of conditions
+def check_args(args):
     remove = [k for k, v in args.items() if v is None]
     for key in remove:
         del args[key]
-    if len(args) < 4:
-        print("A")
-        print("Incorrect parameters.")
-        return quit()
-    elif args["type"] != "diff" and args["type"] != "annuity":
-        print("B")
-        print("Incorrect parameters.")
-        return quit()
-    elif "payment" in args.keys() and "diff" == args["type"]:
-        print("C")
-        print("Incorrect parameters.")
-        return quit()
-    elif "interest" not in args.keys():
-        print("D")
-        print("Incorrect parameters.")
-        return quit()
-    elif any([v < 0 for k, v in args.items() if isinstance(v, float) or isinstance(v, int)]):
-        print("E")
-        print("Incorrect parameters.")
-        return quit()
+    if (len(args) < 4)\
+        or (args["type"] != "diff" and args["type"] != "annuity")\
+        or ("payment" in args.keys() and "diff" == args["type"])\
+        or ("interest" not in args.keys()) \
+        or (any([v < 0 for k, v in args.items() if isinstance(v, float) or isinstance(v, int)])):
+            print("Incorrect parameters.")
+            return quit()
     else:
         return args
 
