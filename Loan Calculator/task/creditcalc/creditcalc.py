@@ -4,7 +4,7 @@ import argparse
 
 class Loan:
 
-    def __init__(self):#přepsání vstupu
+    def __init__(self, args):
         self.type_of_counting = input("What do you want to calculate?\n"
                                       "type 'n' for number of monthly payments\n"
                                       "type 'a' for the monthly payment:\n"
@@ -22,8 +22,8 @@ class Loan:
         payment = int(input("Enter your monthly payment:"))
         interest = float(input("Enter the loan interest:"))
         i = interest / (12 * 100)
-        n = math.log(payment/(payment - i * principal), 1+i)
-        n_y, n_m = (math.ceil(n)//12), (math.ceil(n) - 12 * (math.ceil(n)//12))
+        n = math.log(payment / (payment - i * principal), 1 + i)
+        n_y, n_m = (math.ceil(n) // 12), (math.ceil(n) - 12 * (math.ceil(n) // 12))
         if n_y == 0:
             return f"It will take {n_m} months to repay this loan!"
         elif n_m == 0:
@@ -51,17 +51,29 @@ class Loan:
 
 
 def check_args(args):
-    print("NEW")
+    remove = [k for k, v in args.items() if v is None]
+    for key in remove:
+        del args[key]
     if len(args) < 4:
+        print("A")
         print("Incorrect parameters.")
-    elif args["type"] != ("diff" or "annuity"):
+        return quit()
+    elif args["type"] != "diff" and args["type"] != "annuity":
+        print("B")
         print("Incorrect parameters.")
-    elif ("payment" and "diff") in args.keys():
+        return quit()
+    elif "payment" in args.keys() and "diff" == args["type"]:
+        print("C")
         print("Incorrect parameters.")
+        return quit()
     elif "interest" not in args.keys():
+        print("D")
         print("Incorrect parameters.")
+        return quit()
     elif any([v < 0 for k, v in args.items() if isinstance(v, float) or isinstance(v, int)]):
+        print("E")
         print("Incorrect parameters.")
+        return quit()
     else:
         return args
 
