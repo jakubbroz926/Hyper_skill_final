@@ -27,18 +27,22 @@ class Loan:
         print(f"Overpayment = {total-P}")
 
     def annuity(self):
+        i = self.__getattribute__("interest") / (12 * 100)
         if "periods" not in self.__dict__:
             P = self.__getattribute__("principal")
             p = self.__getattribute__("payment")
-            i = self.__getattribute__("interest")/(12 * 100)
-            n = math.log(p / (p - i * P), 1 + i)
-            n_y = math.ceil(n)
-            print(f"It will take {n_y//12} years to repay this loan!")
-            print(f"Overpayment = {n_y*p-P} ")
+            n = math.ceil(math.log(p / (p - i * P), 1 + i))
+            print(f"It will take {n // 12} years to repay this loan!")
+            print(f"Overpayment = {n // 12 * p-P} ")
+        elif "payment" not in self.__dict__:
+            P = self.__getattribute__("principal")
+            n = self.__getattribute__("periods")
+            p = math.ceil(P * ((i * (1 + i) ** n) / ((1 + i) ** n - 1)))
+            print(f"Your annuity payment = {p}!")
+            print(f"Your overpayment = {n*p - P} ")
         else:
             p = self.__getattribute__("payment")
             n = self.__getattribute__("periods")
-            i = self.__getattribute__("interest")/(12 * 100)
             principal = math.ceil(p / ((i * (1 + i) ** n) / ((1 + i) ** n - 1)))
             print(f"Your loan principal = {principal}!")
             print(f"Overpayment = {math.ceil(n * p - principal)}")
