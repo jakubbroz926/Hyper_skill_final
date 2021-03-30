@@ -50,6 +50,8 @@ class Loan:
         principal = round(payment / ((i * (1 + i) ** months) / ((1 + i) ** months - 1)))
         return f"Your loan principal = {principal}!"
 
+def testing(test):
+    print(test)
 
 def main():
     loan_parser = argparse.ArgumentParser("Informations for counting loan")
@@ -59,6 +61,7 @@ def main():
     loan_parser.add_argument("--intetest",type = float)
     args = loan_parser.parse_args()
     print(type(args))
+
     new_loan = Loan()
 
 
