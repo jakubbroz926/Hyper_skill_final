@@ -4,7 +4,7 @@ import argparse
 
 class Loan:
 
-    def __init__(self):
+    def __init__(self):#přepsání vstupu
         self.type_of_counting = input("What do you want to calculate?\n"
                                       "type 'n' for number of monthly payments\n"
                                       "type 'a' for the monthly payment:\n"
@@ -31,7 +31,6 @@ class Loan:
         else:
             return f"It will take {n_y} years and {n_m} months to repay this loan!"
 
-
     @staticmethod
     def annuity():
         principal = int(input("Enter your principal loan:"))
@@ -51,15 +50,31 @@ class Loan:
         return f"Your loan principal = {principal}!"
 
 
+def check_args(args):
+    print("NEW")
+    if len(args) < 4:
+        print("Incorrect parameters.")
+    elif args["type"] != ("diff" or "annuity"):
+        print("Incorrect parameters.")
+    elif ("payment" and "diff") in args.keys():
+        print("Incorrect parameters.")
+    elif "interest" not in args.keys():
+        print("Incorrect parameters.")
+    elif any([v < 0 for k, v in args.items() if isinstance(v, float) or isinstance(v, int)]):
+        print("Incorrect parameters.")
+    else:
+        return args
+
+
 def main():
-    loan_parser = argparse.ArgumentParser("Informations for counting loan")
-    loan_parser.add_argument("--type",type = str)
-    loan_parser.add_argument("--principal",type = int)
-    loan_parser.add_argument("--period",type = int)
-    loan_parser.add_argument("--intetest",type = float)
-    args = loan_parser.parse_args()
-    print(type(args))
-    new_loan = Loan()
+    loan_parser = argparse.ArgumentParser("Information for counting loan")
+    loan_parser.add_argument("--type", type = str)
+    loan_parser.add_argument("--principal", type = int)
+    loan_parser.add_argument("--periods", type = int)
+    loan_parser.add_argument("--interest", type = float)
+    loan_parser.add_argument("--payment", type = int)
+    args = vars(loan_parser.parse_args())
+    new_loan = Loan(check_args(args))
 
 
 if __name__ == "__main__":
