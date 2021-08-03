@@ -1,6 +1,3 @@
-def done(input):
-    if input == "!done":
-        return quit()
 def help():
     print("Available formatters: plain bold italic header link inline-code ordered-list unordered-list new-line\n"
               "Special commands: !help !done")
