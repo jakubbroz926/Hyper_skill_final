@@ -13,24 +13,27 @@ def link(url):
 
 
 def souping(soup):
-    result = dict()
     all_articles = soup.find_all("article",{"class":"u-full-height c-card c-card--flush"})
     news_articles = []
     for i in all_articles:
         if i.find("span",{"class":"c-meta__type"}).text == "News":
             news_articles.append(i)
-    for x,i in enumerate(news_articles):
-        print(x,i.find("a").get("href"))
-    print(news_articles)
-            #pro každý link z new_articles zavolat nový link, vysekat titul a tělo článku a uložito ho
+    names_of_files = list()
+    for x, i in enumerate(news_articles):
+        main_page = "https://www.nature.com"
+        small_soup = link(main_page+i.find("a")["href"])
+        title =small_soup.find("title").text
+        text_of_file = small_soup.find("div", {"class":"c-article-body u-clearfix"}).text.strip().replace("\n","")
+        names_of_files.append(file_handling(title,text_of_file))
+    print(names_of_files)
+    return names_of_files
 
 
-def file_handling(page_content):
-    if page_content is not None:
-        file_html = open("source.html", "wb")
-        file_html.write(page_content)
-        file_html.close()
-        return "Content saved."
+def file_handling(title,text):
+    title = title.strip(",.-'´’?!").replace("’", "").replace(" ","_")
+    with open(f"{title}.txt", "w", encoding = "utf-8") as file:
+        file.write(text)
+    return file.name
 def check(name):
     if 'title' in name:
         print(file_handling(link(name)))
@@ -38,7 +41,7 @@ def check(name):
         print('Invalid movie page!')
 def main():
     name = "https://www.nature.com/nature/articles?sort=PubDate&year=2020&page=3"
-    print(souping(link(name)))
+    souping(link(name))
 
 
 if __name__ == "__main__":
