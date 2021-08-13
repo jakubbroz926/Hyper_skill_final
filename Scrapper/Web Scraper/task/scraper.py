@@ -7,16 +7,22 @@ def link(url):
         print(f"The URL returned {url_link.status_code}!")
         return None
     else:
-        soup = url_link.content
-        #soup = bs(url_link.content, 'html.parser')
+        #soup = url_link.content
+        soup = bs(url_link.content, 'html.parser')
         return soup
 
 
 def souping(soup):
     result = dict()
-    result['title'] = soup.find('title').text
-    result['description'] = soup.find('meta',{'name':'description'})['content']# Napsat title and meta name description
-    return result
+    all_articles = soup.find_all("article",{"class":"u-full-height c-card c-card--flush"})
+    news_articles = []
+    for i in all_articles:
+        if i.find("span",{"class":"c-meta__type"}).text == "News":
+            news_articles.append(i)
+    for x,i in enumerate(news_articles):
+        print(x,i.find("a").get("href"))
+    print(news_articles)
+            #pro každý link z new_articles zavolat nový link, vysekat titul a tělo článku a uložito ho
 
 
 def file_handling(page_content):
@@ -31,8 +37,8 @@ def check(name):
     else:
         print('Invalid movie page!')
 def main():
-    name = input("Input the URL:")
-    print(file_handling(link(name)))
+    name = "https://www.nature.com/nature/articles?sort=PubDate&year=2020&page=3"
+    print(souping(link(name)))
 
 
 if __name__ == "__main__":
