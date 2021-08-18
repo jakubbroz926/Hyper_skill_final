@@ -33,10 +33,13 @@ def questions(complete_df):
                        complete_df[complete_df["hospital"] == "general"].shape[0],3),
                        round(complete_df[(complete_df["hospital"] == "sports") & (
                                    complete_df["diagnosis"] == "dislocation")].shape[0] /
-                             complete_df[complete_df["hospital"] == "sports"].shape[0], 3)
+                             complete_df[complete_df["hospital"] == "sports"].shape[0], 3),
+                       complete_df.groupby("hospital").median("age")["age"][0] -
+                       complete_df.groupby("hospital").median("age")["age"][2]
+
                        ]
     for i,method in enumerate(applied_methods):
-        print(f"The answer to the {i+1}st question is {method}")
+         print(f"The answer to the {i+1}st question is {method}")
 
 
 def main():
