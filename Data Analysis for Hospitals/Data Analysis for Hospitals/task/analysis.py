@@ -25,8 +25,18 @@ def dataframes_handler(df_frames):
     return new
 
 
-def questions(one_complete_df):
-    pass
+def questions(complete_df):
+    #['general', '0.325', '0.285', '19', ('prenatal', '325')] correct answers by tests
+    print(complete_df.columns)
+    applied_methods = [complete_df.groupby('hospital').size().index[0],
+                       round(complete_df[(complete_df["hospital"] == "general") & (complete_df["diagnosis"] == "stomach")].shape[0]/
+                       complete_df[complete_df["hospital"] == "general"].shape[0],3),
+                       round(complete_df[(complete_df["hospital"] == "sports") & (
+                                   complete_df["diagnosis"] == "dislocation")].shape[0] /
+                             complete_df[complete_df["hospital"] == "sports"].shape[0], 3)
+                       ]
+    for i,method in enumerate(applied_methods):
+        print(f"The answer to the {i+1}st question is {method}")
 
 
 def main():
