@@ -26,21 +26,25 @@ def dataframes_handler(df_frames):
 
 
 def questions(complete_df):
-    #['general', '0.325', '0.285', '19', ('prenatal', '325')] correct answers by tests
+    # ['general', '0.325', '0.285', '19', ('prenatal', '325')] correct answers by tests
     applied_methods = [complete_df.groupby('hospital').size().index[0],
-                       round(complete_df[(complete_df["hospital"] == "general") & (complete_df["diagnosis"] == "stomach")].shape[0]/
-                       complete_df[complete_df["hospital"] == "general"].shape[0],3),
+                       round(complete_df[(complete_df["hospital"] == "general") & (
+                                   complete_df["diagnosis"] == "stomach")].shape[0] /
+                             complete_df[complete_df["hospital"] == "general"].shape[0], 3),
                        round(complete_df[(complete_df["hospital"] == "sports") & (
-                                   complete_df["diagnosis"] == "dislocation")].shape[0] /
+                               complete_df["diagnosis"] == "dislocation")].shape[0] /
                              complete_df[complete_df["hospital"] == "sports"].shape[0], 3),
                        complete_df.groupby("hospital").median("age")["age"][0] -
                        complete_df.groupby("hospital").median("age")["age"][2],
-                       (complete_df[complete_df["blood_test"] == "t"][["hospital","blood_test"]].value_counts().index[0][0],
-                        complete_df[["hospital","blood_test"]].value_counts()[0])
+                       (complete_df[complete_df["blood_test"] == "t"][["hospital", "blood_test"]].value_counts().index[
+                            0][0],
+                        complete_df[["hospital", "blood_test"]].value_counts()[0])
                        ]
-
-    for i,method in enumerate(applied_methods):
-          print(f"The answer to the {i+1}st question is {method}")
+    # blood_tests = complete_df.groupby(['hospital', 'blood_test']).count()
+    # print(f"{blood_tests.index[3][0]}, {blood_tests['gender'][3]} blood tests")
+    #another possible solution, for future inspirations
+    for i, method in enumerate(applied_methods):
+        print(f"The answer to the {i + 1}st question is {method}")
 
 
 def main():
