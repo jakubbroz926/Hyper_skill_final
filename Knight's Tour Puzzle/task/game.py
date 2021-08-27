@@ -12,7 +12,7 @@ def input_checking(lst_of_coord):
 
 def field(cords):
     #ukládání pole do dalších kroků
-    try:
+
         x = cords[0]
         y = cords[1]
         line = "-"*20
@@ -28,8 +28,7 @@ def field(cords):
         print(line,end="\n   ")
         for i in range(8):
             print(i+1,end=" ")
-    except TypeError:
-        pass
+    
 def main():
     numbers = input("Enter the knight's starting position: ").split(" ")
     cords = input_checking(numbers)
