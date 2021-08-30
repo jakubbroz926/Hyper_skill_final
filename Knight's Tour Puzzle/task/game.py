@@ -1,9 +1,9 @@
 def input_checking(lst_of_coord, size_of_field):
     try:
         lst_of_coord = list(map(int, lst_of_coord))
-        assert type(lst_of_coord) != list(),"type"
-        assert len(lst_of_coord) == 2,"size"
-        assert 0 < lst_of_coord[0] <= int(size_of_field[0]) and 0 < lst_of_coord[1] <= int(size_of_field[1]),"jiná velikost"
+        assert type(lst_of_coord) != list()
+        assert len(lst_of_coord) == 2
+        assert 0 < lst_of_coord[0] <= int(size_of_field[0]) and 0 < lst_of_coord[1] <= int(size_of_field[1])
     except (AssertionError, ValueError):
         print("Invalid dimension!")
     else:
@@ -53,19 +53,20 @@ def field_change(field, cords, n_col):
 def main():
     while True:
         try:
-            dimensios = dim_checking(input("Enter your board dimensions: ").split(" "))
-            field_d, n_col = def_field(dimensios)
+            dimensions = dim_checking(input("Enter your board dimensions: ").split(" "))
+            field_d, n_col = def_field(dimensions)
             break
         except TypeError:
             print("Invalid dimension!")
 
     while True:
         try:
-            numbers = input_checking(input("Enter the knight's starting position: ").split(" "), dimensios)
+            numbers = input_checking(input("Enter the knight's starting position: ").split(" "), dimensions)
             printing(*field_change(field_d, numbers, n_col))
             break
         except TypeError:
             print("Invalid dimension!")
+
 
 if __name__ == "__main__":
     main()
