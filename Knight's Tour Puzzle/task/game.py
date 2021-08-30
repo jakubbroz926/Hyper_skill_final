@@ -55,18 +55,17 @@ def main():
         try:
             dimensions = dim_checking(input("Enter your board dimensions: ").split(" "))
             field_d, n_col = def_field(dimensions)
-            break
         except TypeError:
             print("Invalid dimension!")
-
-    while True:
-        try:
-            numbers = input_checking(input("Enter the knight's starting position: ").split(" "), dimensions)
-            printing(*field_change(field_d, numbers, n_col))
-            break
-        except TypeError:
-            print("Invalid dimension!")
-
+        else:
+            while True:
+                try:
+                    numbers = input_checking(input("Enter the knight's starting position: ").split(" "), dimensions)
+                    printing(*field_change(field_d, numbers, n_col))
+                    break
+                except TypeError:
+                    print("Invalid dimension!")
+        break
 
 if __name__ == "__main__":
     main()
