@@ -31,9 +31,10 @@ def printing(field, n_col):
         print(f"{i}| ", end = "")
         print(" ".join(field_line), end = "")
         print(" |", end = "\n")
-    print(line, end = "\n" + " "*(cell_size+2))
+    print(line, end = "\n" + " " * (cell_size + 2))
     for i in range(n_col[0]):
         print(f"{i + 1}" + " " * cell_size, end = "")
+    print("\n")
 
 
 def def_field(sizes):
@@ -50,22 +51,26 @@ def field_change(field, cords, n_col):
     return change_field, n_col
 
 
-def main():
-    while True:
+def possible_positions(field, coordinates):
+
+    x, y = coordinates[0]-1, len(field[0]) - coordinates[1]
+    coords_change = ((-2, 1), (-2, -1), (-1, 2), (-1, -2), (2, 1), (2, -1), (1, 2), (1, -2))
+    for i, (xi, yi) in enumerate(coords_change):
         try:
-            dimensions = dim_checking(input("Enter your board dimensions: ").split(" "))
-            field_d, n_col = def_field(dimensions)
-        except TypeError:
-            print("Invalid dimension!")
-        else:
-            while True:
-                try:
-                    numbers = input_checking(input("Enter the knight's starting position: ").split(" "), dimensions)
-                    printing(*field_change(field_d, numbers, n_col))
-                    break
-                except TypeError:
-                    print("Invalid dimension!")
-        break
+            if (y+yi >= 0) and (x+xi >= 0):
+                field[0][y+yi][x+xi] = "{:>2}".format(0)
+        except IndexError:
+            pass
+    return field[0]
+
+
+
+def main():
+    dimensions = dim_checking(input("Enter your board dimensions: ").split(" "))
+    field_d, n_col = def_field(dimensions)
+    numbers = input_checking(input("Enter the knight's starting position: ").split(" "), dimensions)
+    new_field = possible_positions(field_change(field_d, numbers, n_col), numbers)
+    printing(new_field, n_col)
 
 if __name__ == "__main__":
     main()
