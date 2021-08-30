@@ -66,11 +66,23 @@ def possible_positions(field, coordinates):
 
 
 def main():
-    dimensions = dim_checking(input("Enter your board dimensions: ").split(" "))
-    field_d, n_col = def_field(dimensions)
-    numbers = input_checking(input("Enter the knight's starting position: ").split(" "), dimensions)
-    new_field = possible_positions(field_change(field_d, numbers, n_col), numbers)
-    printing(new_field, n_col)
+    while True:
+        try:
+            dimensions = dim_checking(input("Enter your board dimensions: ").split(" "))
+            field_d, n_col = def_field(dimensions)
+        except TypeError:
+            print("Invalid dimension!")
+        else:
+            while True:
+                try:
+                    numbers = input_checking(input("Enter the knight's starting position: ").split(" "), dimensions)
+                    new_field = possible_positions(field_change(field_d, numbers, n_col), numbers)
+                    printing(new_field, n_col)
+                except TypeError:
+                    print("Invalid dimension!")
+                else:
+                    break
+        break
 
 if __name__ == "__main__":
     main()
