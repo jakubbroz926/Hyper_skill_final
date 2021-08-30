@@ -52,17 +52,15 @@ def field_change(field, cords, n_col):
 
 
 def possible_positions(field, coordinates):
-
-    x, y = coordinates[0]-1, len(field[0]) - coordinates[1]
-    coords_change = ((-2, 1), (-2, -1), (-1, 2), (-1, -2), (2, 1), (2, -1), (1, 2), (1, -2))
-    for i, (xi, yi) in enumerate(coords_change):
+    x, y = coordinates[0] - 1, len(field[0]) - coordinates[1]
+    possible_coordinates = ((-2, 1), (-2, -1), (-1, 2), (-1, -2), (2, 1), (2, -1), (1, 2), (1, -2))
+    for i, (xi, yi) in enumerate(possible_coordinates):
         try:
-            if (y+yi >= 0) and (x+xi >= 0):
-                field[0][y+yi][x+xi] = "{:>2}".format(0)
+            if (y + yi >= 0) and (x + xi >= 0):
+                field[0][y + yi][x + xi] = "{:>2}".format(0)
         except IndexError:
             pass
     return field[0]
-
 
 
 def main():
@@ -83,6 +81,7 @@ def main():
                 else:
                     break
         break
+
 
 if __name__ == "__main__":
     main()
