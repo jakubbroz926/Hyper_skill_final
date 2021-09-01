@@ -54,27 +54,10 @@ def start_position(field, cords, rows_columns):
 
 def for_possible_positions(field, coordinates):
     possible_coordinates = ((-2, 1), (-2, -1), (-1, 2), (-1, -2), (2, 1), (2, -1), (1, 2), (1, -2))
-    y, x = coordinates[1], coordinates[0]-1
-    new_coordinates = [[y+yi,x+xi] for xi, yi in possible_coordinates if
-                       (len(field[0]) - 1 >= x + xi+1 >= 0) and (len(field[1]) - 1 >= y + yi >= 0) and (y+yi,x+xi+1) != (y,x)]
-    for cor in new_coordinates:
-        field[cor[0]][cor[1]] = " o"
-    for x in field:
-        print(x)
-    print(new_coordinates)
-    for new_x, new_y in new_coordinates:
-        total = len([(new_y + py, new_x + px-1) for py, px in possible_coordinates
-                     if (len(field) - 1 >= new_y + py >= 0) and
-                 (len(field[0]) - 1 >= new_x + px-1 >= 0) and
-                     (new_y + py, new_x + px-1) != (y,x)])
-        try:
-            field[new_y][new_x] = "{:>2}".format(total)
-        except IndexError:
-            pass
-        finally:
-            print(total)
-    return field
+    x_main = coordinates[0] - 1
+    y_main = len(field) - coordinates[1]
 
+    return field[y_main][x_main]
 
 def possible_positions(field, coordinates, n = 2):
     possible_coordinates = ((-2, 1), (-2, -1), (-1, 2), (-1, -2), (2, 1), (2, -1), (1, 2), (1, -2))
@@ -112,7 +95,8 @@ def main():
                     positions = input_checking([6, 3], dimensions)
                     start_field = start_position(field_d, positions, rows_columns)
                     new_field = for_possible_positions(start_field, positions)
-                    printing(new_field, rows_columns)
+                    print(new_field)
+                    # printing(new_field, rows_columns)
                 except TypeError:
                     print("Invalid dimension!")
                     n -= 1
