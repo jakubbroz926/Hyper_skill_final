@@ -7,6 +7,8 @@ def input_checking(lst_of_coord, size_of_field):
     except (AssertionError, ValueError):
         print("Invalid dimension!")
     else:
+        lst_of_coord[0] -= 1
+        lst_of_coord[1] = size_of_field[1] - lst_of_coord[1]
         return lst_of_coord
 
 
@@ -22,7 +24,6 @@ def dim_checking(lst_of_field):
 
 
 def printing(field, n_col):
-    print(field)
     size_of_field = n_col[1]
     cell_size = int(len(str(n_col[0] * n_col[1])))
 
@@ -40,63 +41,56 @@ def printing(field, n_col):
 
 def def_field(sizes):
     field_d = [[("_" * len(str(int(sizes[1]) * int(sizes[0])))) for _ in range(int(sizes[0]))] for _ in
-               range(int(sizes[1]))]
-    return field_d, sizes
+                   range(int(sizes[1]))]
+    return field_d
 
 
 def start_position(field, cords, rows_columns):
     change_field = field
     x, y = cords[0], cords[1]
     mark = " " * (len(str(rows_columns[0] * rows_columns[1])) - 1) + "X"
-    change_field[len(field) - y][x - 1] = mark
+    change_field[y][x] = mark
     return change_field
 
 
 def for_possible_positions(field, coordinates):
-    possible_coordinates = ((-2, 1), (-2, -1), (-1, 2), (-1, -2), (2, 1), (2, -1), (1, 2), (1, -2))
-    x_main = coordinates[0] - 1
-    y_main = len(field) - coordinates[1]
+    coordinates = tuple(coordinates)
+    possible_coordinates = ((-2, +1), (-2, -1), (-1, +2), (-1, -2), (+2, +1), (+2, -1), (+1, +2), (+1, -2))
+    x_main = coordinates[0]
+    y_main = coordinates[1]
 
-    return field[y_main][x_main]
-
-def possible_positions(field, coordinates, n = 2):
-    possible_coordinates = ((-2, 1), (-2, -1), (-1, 2), (-1, -2), (2, 1), (2, -1), (1, 2), (1, -2))
-    total = 0
-    if n == 1:
-        return field
-    else:
-        x, y = coordinates[0] - 1, len(field[0]) - coordinates[1]
-        for _, (xi, yi) in enumerate(possible_coordinates):
-            try:
-                if (y + yi >= 0) and (x + xi >= 0):
-                    total += 1
-                    field[y + yi][x + xi] = "{:>2}".format(
-                        total)  # na konci dané recurse se vrátí číslo označíjí počet možných skoků
-                    print(field)
-                    return possible_positions(field, [x + xi, y + yi], n - 1)
-            except IndexError:
-                pass
+    new_coordinates = [(y_main + yi, x_main + xi) for xi, yi in possible_coordinates
+                       if 0 <= y_main + yi < len(field) and
+                       0 <= x_main + xi < len(field[0]) and (x_main + xi, y_main + yi) != (x_main,y_main)]
+    print(new_coordinates)
+    #rekurze
+    for x,y in new_coordinates:
+        try:
+            total = [(y+yn,x+xn)for xn,yn in possible_coordinates]
+            field[x][y] = "{:>2}".format(len(total))
+        except IndexError:
+            pass
+    return field
 
 
 def main():
     n = 10
     while n != 0:
         try:
-            # dim_checking(input("Enter your board dimensions: ").split(" ")) swap back before check
-            dim = [9, 6]
-            dimensions = dim
-            field_d, rows_columns = def_field(dimensions)
+            dimensions = dim_checking(input("Enter your board dimensions: ").split(" "))
+            field_d = def_field(dimensions)
+            printing(field_d,dimensions)
         except TypeError:
             print("Invalid dimension!")
         else:
             while n != 0:
                 try:
                     # input("Enter the knight's starting position: ").split(" ") swap back before check
-                    positions = input_checking([6, 3], dimensions)
-                    start_field = start_position(field_d, positions, rows_columns)
+                    positions = input_checking(input("Enter the knight's starting position: ").split(" "), dimensions)
+                    start_field = start_position(field_d, positions, dimensions)
+                    printing(start_field,dimensions)
                     new_field = for_possible_positions(start_field, positions)
-                    print(new_field)
-                    # printing(new_field, rows_columns)
+                    printing(new_field,dimensions)
                 except TypeError:
                     print("Invalid dimension!")
                     n -= 1
