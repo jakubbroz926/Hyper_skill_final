@@ -51,31 +51,61 @@ def start_position(field, cords, rows_columns):
     return change_field
 
 
-def possible_positions(field, coordinates):
-    x, y = coordinates[0] - 1, len(field[0]) - coordinates[1]
+def for_possible_positions(field, coordinates):
     possible_coordinates = ((-2, 1), (-2, -1), (-1, 2), (-1, -2), (2, 1), (2, -1), (1, 2), (1, -2))
-    for i, (xi, yi) in enumerate(possible_coordinates):
+    x, y = coordinates[0] - 1, len(field[0]) - coordinates[1]
+    for (xim, yim) in possible_coordinates:
         try:
-            if (y + yi >= 0) and (x + xi >= 0):
-                field[y + yi][x + xi] = "{:>2}".format(0)
+            if (len(field[0])-1 >= x+xim >= 0) and (len(field[1])-1 >= y+yim >= 0):
+                total = 0
+                for (xis, yis) in possible_coordinates:
+                    if (len(field[0])-1 >= xim+xis >= 0) and (len(field[1])-1 >= yim+yis >= 0):
+                        print(xim+xis,yim+yis,total,"\n")
+                        total = + 1
+
+                        field[y + yim][x + xim] = "{:>}".format(total)
+                print("S",field,total)
         except IndexError:
             pass
     return field
 
 
+def possible_positions(field, coordinates, n = 2):
+    possible_coordinates = ((-2, 1), (-2, -1), (-1, 2), (-1, -2), (2, 1), (2, -1), (1, 2), (1, -2))
+    total = 0
+    if n == 1:
+        return field
+    else:
+        x, y = coordinates[0] - 1, len(field[0]) - coordinates[1]
+        for _, (xi, yi) in enumerate(possible_coordinates):
+            try:
+                if (y + yi >= 0) and (x + xi >= 0):
+                    total += 1
+                    field[y + yi][x + xi] = "{:>2}".format(
+                        total)  # na konci dané recurse se vrátí číslo označíjí počet možných skoků
+                    print(field)
+                    return possible_positions(field, [x + xi, y + yi], n - 1)
+            except IndexError:
+                pass
+
+
 def main():
     while True:
         try:
-            dimensions = dim_checking(input("Enter your board dimensions: ").split(" "))
+            #dim_checking(input("Enter your board dimensions: ").split(" ")) swap back before check
+            dim = [4,4]
+            dimensions = dim
             field_d, rows_columns = def_field(dimensions)
         except TypeError:
             print("Invalid dimension!")
         else:
             while True:
                 try:
-                    positions = input_checking(input("Enter the knight's starting position: ").split(" "), dimensions)
-                    new_field = possible_positions(start_position(field_d, positions, rows_columns), positions)
-                    printing(new_field, rows_columns)
+                    #input("Enter the knight's starting position: ").split(" ") swap back before check
+                    positions = input_checking([2,2], dimensions)
+                    start_field = start_position(field_d, positions, rows_columns)
+                    for_possible_positions(start_field, positions)
+                    # printing(new_field, rows_columns)
                 except TypeError:
                     print("Invalid dimension!")
                 else:
