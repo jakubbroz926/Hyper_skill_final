@@ -22,6 +22,7 @@ def dim_checking(lst_of_field):
 
 
 def printing(field, n_col):
+    print(field)
     size_of_field = n_col[1]
     cell_size = int(len(str(n_col[0] * n_col[1])))
 
@@ -53,15 +54,25 @@ def start_position(field, cords, rows_columns):
 
 def for_possible_positions(field, coordinates):
     possible_coordinates = ((-2, 1), (-2, -1), (-1, 2), (-1, -2), (2, 1), (2, -1), (1, 2), (1, -2))
-    x, y = coordinates[0] - 1, len(field[0]) - coordinates[1]
-    new_coordinates = [(y+yi,x+xi) for xi, yi in possible_coordinates if (len(field[0])-1 >= x+xi >= 0) and (len(field[1])-1 >= y+yi >= 0) ]
-    for new_x,new_y in new_coordinates:
-        total = len([(new_y+py,new_x+px) for py,px in possible_coordinates
-                     if len(field[1])-1 >= new_y+py >= 0 and
-                     len(field[0])-1 >= new_x+px >= 0 and
-                     (new_y+py,new_x+px) != (x,y)])
-
-        field[new_x][new_y] = "{:>2}".format(total)
+    y, x = coordinates[1], coordinates[0]-1
+    new_coordinates = [[y+yi,x+xi] for xi, yi in possible_coordinates if
+                       (len(field[0]) - 1 >= x + xi+1 >= 0) and (len(field[1]) - 1 >= y + yi >= 0) and (y+yi,x+xi+1) != (y,x)]
+    for cor in new_coordinates:
+        field[cor[0]][cor[1]] = " o"
+    for x in field:
+        print(x)
+    print(new_coordinates)
+    for new_x, new_y in new_coordinates:
+        total = len([(new_y + py, new_x + px-1) for py, px in possible_coordinates
+                     if (len(field) - 1 >= new_y + py >= 0) and
+                 (len(field[0]) - 1 >= new_x + px-1 >= 0) and
+                     (new_y + py, new_x + px-1) != (y,x)])
+        try:
+            field[new_y][new_x] = "{:>2}".format(total)
+        except IndexError:
+            pass
+        finally:
+            print(total)
     return field
 
 
@@ -88,14 +99,17 @@ def main():
     n = 10
     while n != 0:
         try:
-            dimensions = dim_checking(input("Enter your board dimensions: ").split(" "))
+            # dim_checking(input("Enter your board dimensions: ").split(" ")) swap back before check
+            dim = [9, 6]
+            dimensions = dim
             field_d, rows_columns = def_field(dimensions)
         except TypeError:
             print("Invalid dimension!")
         else:
             while n != 0:
                 try:
-                    positions = input_checking(input("Enter the knight's starting position: ").split(" "), dimensions)
+                    # input("Enter the knight's starting position: ").split(" ") swap back before check
+                    positions = input_checking([6, 3], dimensions)
                     start_field = start_position(field_d, positions, rows_columns)
                     new_field = for_possible_positions(start_field, positions)
                     printing(new_field, rows_columns)
