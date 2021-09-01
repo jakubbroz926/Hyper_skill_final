@@ -88,7 +88,7 @@ def main():
             while n != 0:
                 try:
                     # input("Enter the knight's starting position: ").split(" ") swap back before check
-                    positions = input_checking(input("Enter the knight's starting position: ").split(" "), dimensions)
+                    positions = input_checking(tuple(input("Enter the knight's starting position: ").split(" ")), dimensions)
                     start_field = start_position(field_d, positions, dimensions)
                     new_field = for_possible_positions(start_field, positions)
                     printing(new_field,dimensions)
