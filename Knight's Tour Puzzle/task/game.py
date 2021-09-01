@@ -62,12 +62,14 @@ def for_possible_positions(field, coordinates):
     new_coordinates = [(y_main + yi, x_main + xi) for xi, yi in possible_coordinates
                        if 0 <= y_main + yi < len(field) and
                        0 <= x_main + xi < len(field[0]) and (x_main + xi, y_main + yi) != (x_main,y_main)]
-    print(new_coordinates)
-    #rekurze
-    for x,y in new_coordinates:
+    #Potud je to ok.
+    for y,x in new_coordinates:
         try:
-            total = [(y+yn,x+xn)for xn,yn in possible_coordinates]
-            field[x][y] = "{:>2}".format(len(total))
+            total = [(y+yn,x+xn) for yn,xn in possible_coordinates if
+                     0 <= y+yn < len(field)-1 and
+                     0 <= x+xn <= len(field[0])-1 and
+                     (x+xn,y+yn) != (x_main,y_main)]
+            field[y][x] = "{:>2}".format(len(total))
         except IndexError:
             pass
     return field
@@ -79,7 +81,6 @@ def main():
         try:
             dimensions = dim_checking(input("Enter your board dimensions: ").split(" "))
             field_d = def_field(dimensions)
-            printing(field_d,dimensions)
         except TypeError:
             print("Invalid dimension!")
         else:
@@ -88,7 +89,6 @@ def main():
                     # input("Enter the knight's starting position: ").split(" ") swap back before check
                     positions = input_checking(input("Enter the knight's starting position: ").split(" "), dimensions)
                     start_field = start_position(field_d, positions, dimensions)
-                    printing(start_field,dimensions)
                     new_field = for_possible_positions(start_field, positions)
                     printing(new_field,dimensions)
                 except TypeError:
