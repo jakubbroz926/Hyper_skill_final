@@ -54,20 +54,14 @@ def start_position(field, cords, rows_columns):
 def for_possible_positions(field, coordinates):
     possible_coordinates = ((-2, 1), (-2, -1), (-1, 2), (-1, -2), (2, 1), (2, -1), (1, 2), (1, -2))
     x, y = coordinates[0] - 1, len(field[0]) - coordinates[1]
-    for (xim, yim) in possible_coordinates:
-        try:
-            if (len(field[0])-1 >= x+xim >= 0) and (len(field[1])-1 >= y+yim >= 0):
-                total = 0
-                for (xis, yis) in possible_coordinates:
-                    if (len(field[0])-1 >= xim+xis >= 0) and (len(field[1])-1 >= yim+yis >= 0):
-                        print(len(field[0])-1 >= xim+xis >= 0) and (len(field[1])-1 >= yim+yis >= 0)
-                        print(xim+xis,yim+yis,total,"\n")
-                        total = + 1
+    new_coordinates = [(y+yi,x+xi) for xi, yi in possible_coordinates if (len(field[0])-1 >= x+xi >= 0) and (len(field[1])-1 >= y+yi >= 0) ]
+    for new_x,new_y in new_coordinates:
+        total = len([(new_y+py,new_x+px) for py,px in possible_coordinates
+                     if len(field[1])-1 >= new_y+py >= 0 and
+                     len(field[0])-1 >= new_x+px >= 0 and
+                     (new_y+py,new_x+px) != (x,y)])
 
-                        field[y + yim][x + xim] = "{:>}".format(total)
-                print("S",field,total)
-        except IndexError:
-            pass
+        field[new_x][new_y] = "{:>2}".format(total)
     return field
 
 
@@ -91,24 +85,23 @@ def possible_positions(field, coordinates, n = 2):
 
 
 def main():
-    while True:
+    n = 10
+    while n != 0:
         try:
-            #dim_checking(input("Enter your board dimensions: ").split(" ")) swap back before check
-            dim = [4,4]
-            dimensions = dim
+            dimensions = dim_checking(input("Enter your board dimensions: ").split(" "))
             field_d, rows_columns = def_field(dimensions)
         except TypeError:
             print("Invalid dimension!")
         else:
-            while True:
+            while n != 0:
                 try:
-                    #input("Enter the knight's starting position: ").split(" ") swap back before check
-                    positions = input_checking([2,2], dimensions)
+                    positions = input_checking(input("Enter the knight's starting position: ").split(" "), dimensions)
                     start_field = start_position(field_d, positions, rows_columns)
-                    for_possible_positions(start_field, positions)
-                    # printing(new_field, rows_columns)
+                    new_field = for_possible_positions(start_field, positions)
+                    printing(new_field, rows_columns)
                 except TypeError:
                     print("Invalid dimension!")
+                    n -= 1
                 else:
                     break
         break
