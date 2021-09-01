@@ -43,12 +43,12 @@ def def_field(sizes):
     return field_d, sizes
 
 
-def field_change(field, cords, n_col):
+def start_position(field, cords, rows_columns):
     change_field = field
     x, y = cords[0], cords[1]
-    mark = " " * (len(str(n_col[0] * n_col[1])) - 1) + "X"
+    mark = " " * (len(str(rows_columns[0] * rows_columns[1])) - 1) + "X"
     change_field[len(field) - y][x - 1] = mark
-    return change_field, n_col
+    return change_field
 
 
 def possible_positions(field, coordinates):
@@ -57,25 +57,25 @@ def possible_positions(field, coordinates):
     for i, (xi, yi) in enumerate(possible_coordinates):
         try:
             if (y + yi >= 0) and (x + xi >= 0):
-                field[0][y + yi][x + xi] = "{:>2}".format(0)
+                field[y + yi][x + xi] = "{:>2}".format(0)
         except IndexError:
             pass
-    return field[0]
+    return field
 
 
 def main():
     while True:
         try:
             dimensions = dim_checking(input("Enter your board dimensions: ").split(" "))
-            field_d, n_col = def_field(dimensions)
+            field_d, rows_columns = def_field(dimensions)
         except TypeError:
             print("Invalid dimension!")
         else:
             while True:
                 try:
-                    numbers = input_checking(input("Enter the knight's starting position: ").split(" "), dimensions)
-                    new_field = possible_positions(field_change(field_d, numbers, n_col), numbers)
-                    printing(new_field, n_col)
+                    positions = input_checking(input("Enter the knight's starting position: ").split(" "), dimensions)
+                    new_field = possible_positions(start_position(field_d, positions, rows_columns), positions)
+                    printing(new_field, rows_columns)
                 except TypeError:
                     print("Invalid dimension!")
                 else:
