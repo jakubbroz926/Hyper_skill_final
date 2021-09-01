@@ -60,6 +60,7 @@ def for_possible_positions(field, coordinates):
                 total = 0
                 for (xis, yis) in possible_coordinates:
                     if (len(field[0])-1 >= xim+xis >= 0) and (len(field[1])-1 >= yim+yis >= 0):
+                        print(len(field[0])-1 >= xim+xis >= 0) and (len(field[1])-1 >= yim+yis >= 0)
                         print(xim+xis,yim+yis,total,"\n")
                         total = + 1
 
