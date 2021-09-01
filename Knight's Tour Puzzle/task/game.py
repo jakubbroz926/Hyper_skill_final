@@ -63,10 +63,11 @@ def for_possible_positions(field, coordinates):
                        if 0 <= y_main + yi < len(field) and
                        0 <= x_main + xi < len(field[0]) and (x_main + xi, y_main + yi) != (x_main,y_main)]
     #Potud je to ok.
+    #Je možné vytvořit rekurzi
     for y,x in new_coordinates:
         try:
             total = [(y+yn,x+xn) for yn,xn in possible_coordinates if
-                     0 <= y+yn < len(field)-1 and
+                     0 <= y+yn <= len(field)-1 and
                      0 <= x+xn <= len(field[0])-1 and
                      (x+xn,y+yn) != (x_main,y_main)]
             field[y][x] = "{:>2}".format(len(total))
