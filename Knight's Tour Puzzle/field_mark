@@ -1,0 +1,10 @@
+def field_mark(field,position):
+    for line in field:
+        if "_X" in line:
+            line[line.index(" X")] = "_*"
+    x = position[1]
+    y = position[0]
+    field[y][x] = "_X"
+
+field = [[" X","_","_"]["_","_","_"]]
+print(field_mark(field,(1,1)))
