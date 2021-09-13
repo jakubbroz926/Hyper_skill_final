@@ -4,11 +4,12 @@ def rekurze(lst_of_lst, lst_of_positions):
     length_of_pos = len(lst_of_positions)
     tuples = [(lst_of_positions[i % length_of_pos] - 1,
                length_of_field - lst_of_positions[i + 1 % length_of_pos]) for i in range(0, length_of_pos, 2)]
-#Toto se provede vzdy
-    new_positions = [[(y+yi,x+xi) for yi,xi in cordination_changes] for x,y in tuples] #zde je prohozeni x a y v listu
+    # Toto se provede vzdy
+    new_positions = [[(y + yi, x + xi) for yi, xi in cordination_changes if 0 <= y + yi < length_of_field and
+                      0 <= x + xi < len(lst_of_lst[0])
+                      and (x + xi, y + yi) != (x, y)
+                      ] for x, y in tuples]  # zde je prohozeni x a y v listu
     print(new_positions)
-
-
 
 
 def def_field(sizes):
