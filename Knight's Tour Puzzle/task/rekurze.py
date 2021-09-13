@@ -1,10 +1,13 @@
 def rekurze(lst_of_lst, lst_of_positions):
-    lenght_of_field = len(lst_of_positions)
+    cordination_changes = ((-2, 1), (-2, -1), (-1, 2), (-1, -2), (2, 1), (2, -1), (1, 2), (1, -2))
+    length_of_field = len(lst_of_lst)
+    length_of_pos = len(lst_of_positions)
+    tuples = [(lst_of_positions[i % length_of_pos] - 1,
+               length_of_field - lst_of_positions[i + 1 % length_of_pos]) for i in range(0, length_of_pos, 2)]
+#Toto se provede vzdy
+    new_positions = [[(y+yi,x+xi) for yi,xi in cordination_changes] for x,y in tuples] #zde je prohozeni x a y v listu
+    print(new_positions)
 
-    tuples = [(lst_of_positions[i % lenght_of_field],
-               lst_of_positions[i+1 % lenght_of_field]) for i,_ in enumerate(lst_of_positions)]
-    print(tuples)
-    coords_change = ((-2, 1), (-2, -1), (-1, 2), (-1, -2), (2, 1), (2, -1), (1, 2), (1, -2))
 
 
 
