@@ -1,11 +1,11 @@
-def rekurze(lst_of_lst,lst_of_positions):
-    y_x = [((len(lst_of_lst) - lst_of_positions[i+1 % len(lst_of_positions)])-1,
-            (lst_of_positions[i % len(lst_of_positions)]))
-            for i in range(0, len(lst_of_positions), 2)]
-    possible_coordinates = ((-2, +1), (-2, -1), (-1, +2), (-1, -2), (+2, +1), (+2, -1), (+1, +2), (+1, -2))
-    print(y_x)
-    lst_of_lst[y_x[0][0]][y_x[0][1]] = "X"
-    print(lst_of_lst)
+def rekurze(lst_of_lst, lst_of_positions):
+    lenght_of_field = len(lst_of_positions)
+
+    tuples = [(lst_of_positions[i % lenght_of_field],
+               lst_of_positions[i+1 % lenght_of_field]) for i,_ in enumerate(lst_of_positions)]
+    print(tuples)
+    coords_change = ((-2, 1), (-2, -1), (-1, 2), (-1, -2), (2, 1), (2, -1), (1, 2), (1, -2))
+
 
 
 def def_field(sizes):
@@ -20,7 +20,7 @@ def main():
     sizes_of_field = [int(i) for i in input("Size of x and y:\n").split(" ")]
     print(sizes_of_field)
     field = def_field(sizes_of_field)
-    lst_of_positions = [int(i)-1 for i in input("Start position:\n").split(" ")]
+    lst_of_positions = [int(i) for i in input("Start position:\n").split(" ")]
     rekurze(field, lst_of_positions)
 
 
