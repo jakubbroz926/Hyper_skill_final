@@ -41,11 +41,14 @@ def printing(field, n_col):
 
 def def_field(sizes):
     field_d = [[("_" * len(str(int(sizes[1]) * int(sizes[0])))) for _ in range(int(sizes[0]))] for _ in
-                   range(int(sizes[1]))]
+
+               range(int(sizes[1]))]
+
     return field_d
 
 
 def start_position(field, cords, rows_columns):
+    """Creation of field from input values."""
     change_field = field
     x, y = cords[0], cords[1]
     mark = " " * (len(str(rows_columns[0] * rows_columns[1])) - 1) + "X"
@@ -53,12 +56,24 @@ def start_position(field, cords, rows_columns):
     return change_field
 
 
+def field_mark(field, position):
+    """For changing the field in stage 5/6
+    It changes the actual mark X with *."""
+    length_of_mark = len(field[0][0])
+    mark_symbol = "_" * length_of_mark + "X"
+    for line in field:
+        if mark_symbol in line:
+            line[line.index(mark_symbol)] = length_of_mark * "*"
+    x = position[1]
+    y = position[0]
+    field[y][x] = "_X"
+
+
 def for_possible_positions(field, coordinates):
-    coordinates = [tuple([coordinates[i],coordinates[i+1]]) for i in range(0,len(coordinates),2)]
+    coordinates = [tuple([coordinates[i], coordinates[i + 1]]) for i in range(0, len(coordinates), 2)]
     possible_coordinates = ((-2, +1), (-2, -1), (-1, +2), (-1, -2), (+2, +1), (+2, -1), (+1, +2), (+1, -2))
     x_main = coordinates[0][0]
     y_main = coordinates[0][1]
-
     new_coordinates = [(y_main + yi, x_main + xi) for xi, yi in possible_coordinates for y,x in coordinates
                        if 0 <= y_main + yi < len(field) and
                        0 <= x_main + xi < len(field[0]) and (x_main + xi, y_main + yi) != (x_main,y_main)]
@@ -69,6 +84,16 @@ def for_possible_positions(field, coordinates):
                      0 <= y+yn < len(field) and
                      0 <= x+xn < len(field[0]) and
                      (x+xn,y+yn) != (x_main, y_main)]
+    new_coordinates = [(y_main + yi, x_main + xi) for xi, yi in possible_coordinates for y, x in coordinates
+                       if 0 <= y_main + yi < len(field) and
+                       0 <= x_main + xi < len(field[0]) and (x_main + xi, y_main + yi) != (x_main, y_main)]
+    # Potud je to ok.
+    # Je možné vytvořit rekurzi
+    for y, x in new_coordinates:
+        total = [(y + yn, x + xn) for yn, xn in possible_coordinates if
+                 0 <= y + yn < len(field) and
+                 0 <= x + xn < len(field[0]) and
+                 (x + xn, y + yn) != (x_main, y_main)]
         field[y][x] = "{:>2}".format(len(total))
     return field
 
@@ -89,6 +114,7 @@ def main():
                     start_field = start_position(field_d, positions, dimensions)
                     new_field = for_possible_positions(start_field, positions)
                     printing(new_field,dimensions)
+
                 except TypeError:
                     print("Invalid dimension!")
                     n -= 1
