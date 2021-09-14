@@ -1,29 +1,28 @@
-def input_checking(lst_of_coord, size_of_field):
+def input_checking(lst_of_coord,n_rows,n_columns):
     try:
-        lst_of_coord = list(map(int, lst_of_coord))
-        assert type(lst_of_coord) != list()
         assert len(lst_of_coord) == 2
-        assert 0 < lst_of_coord[0] <= int(size_of_field[0]) and 0 < lst_of_coord[1] <= int(size_of_field[1])
+        assert 0 < lst_of_coord[0] <= int(n_rows[0]) and 0 < lst_of_coord[1] <= int(n_columns)
     except (AssertionError, ValueError):
-        print("Invalid dimension!")
+        print("Invalid dimension! check")
     else:
         lst_of_coord[0] -= 1
-        lst_of_coord[1] = size_of_field[1] - lst_of_coord[1]
+        lst_of_coord[1] = n_columns - lst_of_coord[1]
         return lst_of_coord
 
 
 def dim_checking(lst_of_field):
     try:
-        field_coord = list(map(int, lst_of_field))
-        assert len(field_coord) == 2
-        assert field_coord[0] > 0 and field_coord[1] > 0
+        assert len(lst_of_field) == 2
+        assert lst_of_field[0] > 0 and lst_of_field[1] > 0
     except (AssertionError, ValueError):
         print("Invalid dimension!")
     else:
-        return field_coord
+        return lst_of_field
 
 
 def printing(field, n_col):
+    print(field)
+    print(n_col)
     size_of_field = n_col[1]
     cell_size = int(len(str(n_col[0] * n_col[1])))
 
@@ -39,16 +38,16 @@ def printing(field, n_col):
     print("\n")
 
 
-def def_field(sizes):
-    field_d = [[("_" * len(str(int(sizes[1]) * int(sizes[0])))) for _ in range(int(sizes[0]))] for _ in
-                   range(int(sizes[1]))]
+def def_field(n_rows,n_columns):
+    field_d = [[("_" * len(str(int(n_columns) * int(n_rows)))) for _ in range(int(n_rows))] for _ in
+                   range(int(n_columns))]
     return field_d
 
 
-def start_position(field, cords, rows_columns):
+def start_position(field, cords, n_rows, n_columns):
     change_field = field
     x, y = cords[0], cords[1]
-    mark = " " * (len(str(rows_columns[0] * rows_columns[1])) - 1) + "X"
+    mark = " " * (len(str(n_rows * n_columns)) - 1) + "X"
     change_field[y][x] = mark
     return change_field
 
@@ -78,19 +77,21 @@ def for_possible_positions(field, coordinates):
 
 def main():
         try:
-            dimensions = dim_checking(input("Enter your board dimensions: ").split(" "))
-            field_d = def_field(dimensions)
+            n_rows, n_columns = dim_checking([int(i) for i in input("Enter your board dimensions: ").split(" ")])
+            field_d = def_field(n_rows,n_columns)
         except TypeError:
-            print("Invalid dimension!")
+            print("Invalid dimension! main1")
         else:
                 try:
                     # input("Enter the knight's starting position: ").split(" ") swap back before check
-                    positions = input_checking([int(i) for i in input("Enter the knight's starting position: ").split(" ")], dimensions)
-                    start_field = start_position(field_d, positions, dimensions)
+                    positions = input_checking([int(i) for i in input("Enter the knight's starting position: ").split(" ")], n_rows,n_columns)
+                    #Chyba vyse
+                    start_field = start_position(field_d, positions, n_rows,n_columns)
+                    print("B")
                     new_field = for_possible_positions(start_field, positions)
-                    printing(new_field,dimensions)
+                    printing(new_field,n_rows,n_columns)
                 except TypeError:
-                    print("Invalid dimension!")
+                    print("Invalid dimension! main 2")
 
 
 if __name__ == "__main__":
