@@ -42,5 +42,3 @@ def main():
     positions = first_position(field, lst_of_positions)
     rekurze(field,positions)
 
-if __name__ == "__main__":
-    main()

@@ -9,7 +9,7 @@ def input_checking(lst_of_coord, size_of_field):
     else:
         lst_of_coord[0] -= 1
         lst_of_coord[1] = size_of_field[1] - lst_of_coord[1]
-        return tuple(lst_of_coord)
+        return lst_of_coord
 
 
 def dim_checking(lst_of_field):
@@ -54,29 +54,26 @@ def start_position(field, cords, rows_columns):
 
 
 def for_possible_positions(field, coordinates):
-    coordinates = [tuple([coordinates[i],coordinates[i+1]]) for i in range(0,len(coordinates),2)]
+    coordinates = tuple(coordinates)
     possible_coordinates = ((-2, +1), (-2, -1), (-1, +2), (-1, -2), (+2, +1), (+2, -1), (+1, +2), (+1, -2))
-    x_main = coordinates[0][0]
-    y_main = coordinates[0][1]
+    x_main = coordinates[0]
+    y_main = coordinates[1]
 
-    new_coordinates = [(y_main + yi, x_main + xi) for xi, yi in possible_coordinates for y,x in coordinates
+    new_coordinates = [(y_main + yi, x_main + xi) for xi, yi in possible_coordinates
                        if 0 <= y_main + yi < len(field) and
                        0 <= x_main + xi < len(field[0]) and (x_main + xi, y_main + yi) != (x_main,y_main)]
     #Potud je to ok.
     #Je možné vytvořit rekurzi
-    if len(new_coordinates) == 0:
-        return 0
-    else:
-        return for_possible_positions(field,new_coordinates)
+    for y,x in new_coordinates:
+        try:
+            total = [(y+yn,x+xn) for yn,xn in possible_coordinates if
+                     0 <= y+yn <= len(field)-1 and
+                     0 <= x+xn <= len(field[0])-1 and
+                     (x+xn,y+yn) != (x_main,y_main)]
+            field[y][x] = "{:>2}".format(len(total))
+        except IndexError:
+            pass
     return field
-    # for y, x in new_coordinates:
-    #     total = [(y+yn, x+xn) for yn,xn in possible_coordinates if
-    #                  0 <= y+yn < len(field) and
-    #                  0 <= x+xn < len(field[0]) and
-    #                  (x+xn,y+yn) != (x_main, y_main)]
-    #     field[y][x] = "{:>2}".format(len(total))
-    #return field
-
 
 
 def main():
@@ -91,7 +88,7 @@ def main():
             while n != 0:
                 try:
                     # input("Enter the knight's starting position: ").split(" ") swap back before check
-                    positions = input_checking(tuple(input("Enter the knight's starting position: ").split(" ")), dimensions)
+                    positions = input_checking(input("Enter the knight's starting position: ").split(" "), dimensions)
                     start_field = start_position(field_d, positions, dimensions)
                     new_field = for_possible_positions(start_field, positions)
                     printing(new_field,dimensions)
