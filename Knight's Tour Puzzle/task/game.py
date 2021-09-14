@@ -77,27 +77,20 @@ def for_possible_positions(field, coordinates):
 
 
 def main():
-    n = 10
-    while n != 0:
         try:
             dimensions = dim_checking(input("Enter your board dimensions: ").split(" "))
             field_d = def_field(dimensions)
         except TypeError:
             print("Invalid dimension!")
         else:
-            while n != 0:
                 try:
                     # input("Enter the knight's starting position: ").split(" ") swap back before check
-                    positions = input_checking(input("Enter the knight's starting position: ").split(" "), dimensions)
+                    positions = input_checking([int(i) for i in input("Enter the knight's starting position: ").split(" ")], dimensions)
                     start_field = start_position(field_d, positions, dimensions)
                     new_field = for_possible_positions(start_field, positions)
                     printing(new_field,dimensions)
                 except TypeError:
                     print("Invalid dimension!")
-                    n -= 1
-                else:
-                    break
-        break
 
 
 if __name__ == "__main__":
