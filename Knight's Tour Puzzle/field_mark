@@ -8,3 +8,4 @@ def field_mark(field,position):
 
 field = [[" X","_","_"]["_","_","_"]]
 print(field_mark(field,(1,1)))
+# field[y][x] = "{:>2}".format(len(total))
