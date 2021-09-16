@@ -8,8 +8,8 @@ def input_checking(lst_of_coord, n_rows, n_columns):
     else:
         lst_of_coord[0] -= 1
         lst_of_coord[1] = n_columns - lst_of_coord[1]
-        y_x_list_of_tuples = [(lst_of_coord[i + 1 % length_of_lst],lst_of_coord[i % length_of_lst])
-                for i in range(0, length_of_lst, 2)]
+        y_x_list_of_tuples = [(lst_of_coord[i + 1 % length_of_lst], lst_of_coord[i % length_of_lst])
+                              for i in range(0, length_of_lst, 2)]
         return y_x_list_of_tuples
 
 
@@ -23,26 +23,23 @@ def dim_checking(lst_of_field):
         return lst_of_field
 
 
-def field_marking(field,cell_size, positions):
+def field_marking(field, cell_size, positions):
     old_marker = " " * (cell_size - 1) + "X"
     unpacked_positions = enter_to_tuple(positions)
     for position in unpacked_positions:
-        y, x = position[0],position[1]
+        # Here would be possible call possible positions and change the number in field
+        y, x = position[0], position[1]
         field[y][x] = old_marker
-    print(field)
     return field
-    #Change old mark X for used mark *
-    for line in field:
-        if old_marker in line:
-            line[old_marker] = " " * (cell_size-1)+"*"
-
-
+    # Change old mark X for used mark *
+    # for line in field:
+    #     if old_marker in line:
+    #         line[old_marker] = " " * (cell_size - 1) + "*"
 
     # field[y][x] = "{:>2}".format(len(total))
 
 
-
-def printing(field,cell_size, n_rows, n_columns):
+def printing(field, cell_size, n_rows, n_columns):
     size_of_field = n_columns
     line = " " + "-" * (3 + n_rows * (cell_size + 1))
     print(line)
@@ -71,9 +68,9 @@ def def_field(n_rows, n_columns):
     return field_d
 
 
-def start_position(field,cell_size, cords):
+def start_position(field, cell_size, cords):
     change_field = field
-    y,x = cords[0][0],cords[0][1]
+    y, x = cords[0][0], cords[0][1]
     mark = " " * (cell_size - 1) + "X"
     change_field[y][x] = mark
     return change_field
@@ -98,16 +95,16 @@ def main():
     else:
         try:
             y_x_tuples = input_checking([int(i) for i in input("Enter the knight's starting position: ").split(" ")],
-                                       n_rows, n_columns)
-            start_field = start_position(field_d,cell_size, y_x_tuples)
+                                        n_rows, n_columns)
+            start_field = start_position(field_d, cell_size, y_x_tuples)
             first_position = first_coordinate(n_rows, n_columns, y_x_tuples)
-            new_field = field_marking(start_field,cell_size,first_position,)
-            printing(new_field,cell_size, n_rows, n_columns)
+            new_field = field_marking(start_field, cell_size, first_position, )
+            printing(new_field, cell_size, n_rows, n_columns)
         except (TypeError, ValueError):
             print("Invalid dimension! main 2")
         else:
             pass
-            #There will be lines for asking newer lines
+            # There will be lines for asking newer lines
 
 
 if __name__ == "__main__":
