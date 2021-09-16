@@ -1,4 +1,4 @@
-def input_checking(lst_of_coord, n_rows, n_columns):
+def input_checking(lst_of_coord, n_rows, n_columns,used):
     length_of_lst = len(lst_of_coord)
     try:
         assert len(lst_of_coord) == 2
@@ -10,6 +10,7 @@ def input_checking(lst_of_coord, n_rows, n_columns):
         lst_of_coord[1] = n_columns - lst_of_coord[1]
         y_x_list_of_tuples = [(lst_of_coord[i + 1 % length_of_lst], lst_of_coord[i % length_of_lst])
                               for i in range(0, length_of_lst, 2)]
+        used.add(*y_x_list_of_tuples)
         return y_x_list_of_tuples
 
 
@@ -18,16 +19,14 @@ def dim_checking(lst_of_field):
         assert len(lst_of_field) == 2
         assert lst_of_field[0] > 0 and lst_of_field[1] > 0
     except (AssertionError, ValueError):
-        print("Invalid dimension! dimension")
+        print("Invalid dimension!")
     else:
         return lst_of_field
 
 
-def field_marking(field, cell_size, positions):
-    old_marker = " " * (cell_size - 1) + "X"
-    unpacked_positions = enter_to_tuple(positions)
-    for position in unpacked_positions:
-        # Here would be possible call possible positions and change the number in field
+def field_marking(field, cell_size, positions, n_rows, n_columns,used):
+    for position in positions:
+        old_marker = " " * (cell_size - 1) + str(len(first_coordinate(n_rows,n_columns,[position],used)))
         y, x = position[0], position[1]
         field[y][x] = old_marker
     return field
@@ -76,36 +75,40 @@ def start_position(field, cell_size, cords):
     return change_field
 
 
-def first_coordinate(n_rows, n_columns, coordinates):
+def first_coordinate(n_rows, n_columns, coordinates, used):
     possible_coordinates = ((-2, +1), (-2, -1), (-1, +2), (-1, -2), (+2, +1), (+2, -1), (+1, +2), (+1, -2))
-    first_coordinates = [[(y_main + yi, x_main + xi) for xi, yi in possible_coordinates
-                          if 0 <= y_main + yi < n_columns and
-                          0 <= x_main + xi < n_rows if (x_main + xi, y_main + yi) != (x_main, y_main)]
-                         for (y_main, x_main) in coordinates]
+    first_coordinates = [(y_main + yi, x_main + xi) for xi, yi in possible_coordinates
+                         for (y_main, x_main) in coordinates
+                         if 0 <= y_main + yi < n_columns and
+                         0 <= x_main + xi < n_rows and (y_main + yi,x_main + xi) not in used
+                         ]
     return first_coordinates
 
 
 def main():
+    used_coordinates = set()
     try:
         n_rows, n_columns = dim_checking([int(i) for i in input("Enter your board dimensions: ").split(" ")])
         field_d = def_field(n_rows, n_columns)
         cell_size = int(len(str(n_rows * n_columns)))
-    except TypeError:
-        print("Invalid dimension! main1")
+    except (ValueError,TypeError):
+        print("Invalid dimension!")
     else:
         try:
             y_x_tuples = input_checking([int(i) for i in input("Enter the knight's starting position: ").split(" ")],
-                                        n_rows, n_columns)
+                                        n_rows, n_columns,used_coordinates)
             start_field = start_position(field_d, cell_size, y_x_tuples)
-            first_position = first_coordinate(n_rows, n_columns, y_x_tuples)
-            new_field = field_marking(start_field, cell_size, first_position, )
+            first_position = first_coordinate(n_rows, n_columns, y_x_tuples,used_coordinates)
+
+            new_field = field_marking(start_field, cell_size, first_position, n_rows, n_columns,used_coordinates)
             printing(new_field, cell_size, n_rows, n_columns)
         except (TypeError, ValueError):
             print("Invalid dimension! main 2")
         else:
             pass
-            # There will be lines for asking newer lines
-            # Noted added
+        # There will be lines for asking newer lines
+        # Noted added
+
 
 if __name__ == "__main__":
     main()
