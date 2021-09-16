@@ -81,7 +81,7 @@ def main():
             field_d = def_field(n_rows,n_columns)
         except TypeError:
             print("Invalid dimension! main1")
-        else:
+        else:s
                 try:
                     # input("Enter the knight's starting position: ").split(" ") swap back before check
                     positions = input_checking([int(i) for i in input("Enter the knight's starting position: ").split(" ")], n_rows,n_columns)
