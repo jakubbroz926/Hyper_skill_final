@@ -84,30 +84,62 @@ def first_coordinate(n_rows, n_columns, coordinates, used):
                          ]
     return first_coordinates
 
+def recursion():
+    return True
+
+def ask():
+    return input("Do you want to try the puzzle? (y/n):")
+
 
 def main():
     used_coordinates = set()
-    try:
-        n_rows, n_columns = dim_checking([int(i) for i in input("Enter your board dimensions: ").split(" ")])
-        field_d = def_field(n_rows, n_columns)
-        cell_size = int(len(str(n_rows * n_columns)))
-    except (ValueError,TypeError):
-        print("Invalid dimension!")
-    else:
+    while True:
+        try:
+            n_rows, n_columns = dim_checking([int(i) for i in input("Enter your board dimensions: ").split(" ")])
+            field_d = def_field(n_rows, n_columns)
+            cell_size = int(len(str(n_rows * n_columns)))
+        except (ValueError,TypeError):
+            print("Invalid dimension!")
+        else:
+            break
+    while True:
         try:
             y_x_tuples = input_checking([int(i) for i in input("Enter the knight's starting position: ").split(" ")],
-                                        n_rows, n_columns,used_coordinates)
+                                        n_rows, n_columns, used_coordinates)
             start_field = start_position(field_d, cell_size, y_x_tuples)
-            first_position = first_coordinate(n_rows, n_columns, y_x_tuples,used_coordinates)
-
-            new_field = field_marking(start_field, cell_size, first_position, n_rows, n_columns,used_coordinates)
-            printing(new_field, cell_size, n_rows, n_columns)
         except (TypeError, ValueError):
             print("Invalid dimension! main 2")
         else:
-            pass
-        # There will be lines for asking newer lines
-        # Noted added
+            break
+    while True:
+        answer = ask()
+        if answer == "y":
+            if recursion():
+                pass #Kontrola, pokud existuje řešení nechá hráče řešit, pokud ne, vrátí No solutions
+            else:
+                print("No solutions exists !")
+
+        elif answer == "n":
+            if recursion():
+                return #Vrati zpoctene pole
+            else:
+                print("No solutions exists !")
+        else:
+            print("Invalid input!")
+            continue
+        break
+
+        # first_position = first_coordinate(n_rows, n_columns, y_x_tuples, used_coordinates)
+        #
+        #     new_field = field_marking(start_field, cell_size, first_position, n_rows, n_columns, used_coordinates)
+        #     printing(new_field, cell_size, n_rows, n_columns)
+        # except (TypeError, ValueError):
+        #         print("Invalid dimension! main 2")
+        # else:
+        #     pass
+        #     # There will be lines for asking newer lines
+        #     # Noted added
+
 
 
 if __name__ == "__main__":
