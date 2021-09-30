@@ -1,4 +1,4 @@
-def input_checking(lst_of_coord, n_rows, n_columns,used):
+def input_checking(lst_of_coord, n_rows, n_columns, used):
     length_of_lst = len(lst_of_coord)
     try:
         assert len(lst_of_coord) == 2
@@ -24,9 +24,9 @@ def dim_checking(lst_of_field):
         return lst_of_field
 
 
-def field_marking(field, cell_size, positions, n_rows, n_columns,used):
+def field_marking(field, cell_size, positions, n_rows, n_columns, used):
     for position in positions:
-        old_marker = " " * (cell_size - 1) + str(len(first_coordinate(n_rows,n_columns,[position],used)))
+        old_marker = " " * (cell_size - 1) + str(len(first_coordinate(n_rows, n_columns, [position], used)))
         y, x = position[0], position[1]
         field[y][x] = old_marker
     return field
@@ -80,12 +80,14 @@ def first_coordinate(n_rows, n_columns, coordinates, used):
     first_coordinates = [(y_main + yi, x_main + xi) for xi, yi in possible_coordinates
                          for (y_main, x_main) in coordinates
                          if 0 <= y_main + yi < n_columns and
-                         0 <= x_main + xi < n_rows and (y_main + yi,x_main + xi) not in used
+                         0 <= x_main + xi < n_rows and (y_main + yi, x_main + xi) not in used
                          ]
     return first_coordinates
 
+
 def recursion():
     return True
+
 
 def ask():
     return input("Do you want to try the puzzle? (y/n):")
@@ -98,7 +100,7 @@ def main():
             n_rows, n_columns = dim_checking([int(i) for i in input("Enter your board dimensions: ").split(" ")])
             field_d = def_field(n_rows, n_columns)
             cell_size = int(len(str(n_rows * n_columns)))
-        except (ValueError,TypeError):
+        except (ValueError, TypeError):
             print("Invalid dimension!")
         else:
             break
@@ -139,7 +141,6 @@ def main():
         #     pass
         #     # There will be lines for asking newer lines
         #     # Noted added
-
 
 
 if __name__ == "__main__":
