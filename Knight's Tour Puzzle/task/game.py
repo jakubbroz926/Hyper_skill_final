@@ -30,12 +30,6 @@ def field_marking(field, cell_size, positions, n_rows, n_columns, used):
         y, x = position[0], position[1]
         field[y][x] = old_marker
     return field
-    # Change old mark X for used mark *
-    # for line in field:
-    #     if old_marker in line:
-    #         line[old_marker] = " " * (cell_size - 1) + "*"
-
-    # field[y][x] = "{:>2}".format(len(total))
 
 
 def printing(field, cell_size, n_rows, n_columns):
@@ -76,17 +70,24 @@ def start_position(field, cell_size, cords):
 
 
 def first_coordinate(n_rows, n_columns, coordinates, used):
+
     possible_coordinates = ((-2, +1), (-2, -1), (-1, +2), (-1, -2), (+2, +1), (+2, -1), (+1, +2), (+1, -2))
-    first_coordinates = [(y_main + yi, x_main + xi) for xi, yi in possible_coordinates
+    coordinates = [(y_main + yi, x_main + xi) for xi, yi in possible_coordinates
                          for (y_main, x_main) in coordinates
                          if 0 <= y_main + yi < n_columns and
                          0 <= x_main + xi < n_rows and (y_main + yi, x_main + xi) not in used
                          ]
-    return first_coordinates
+    for i in coordinates:
+        if len(i) == 0:
+            return False
+        else:
+            first_coordinate(n_rows,n_columns,list(i),used)
 
 
-def recursion():
-    return True
+def recursion(n_rows,n_columns,coordinates,used):
+    if first_coordinate(n_rows,n_columns,coordinates,used):
+        return True
+    return False
 
 
 def ask():
@@ -116,18 +117,20 @@ def main():
     while True:
         answer = ask()
         if answer == "y":
-            if recursion():
-                pass #Kontrola, pokud existuje řešení nechá hráče řešit, pokud ne, vrátí No solutions
+            if recursion(n_rows,n_columns,y_x_tuples,used_coordinates):
+                print("Answer exists")
+                break
             else:
                 print("No solutions exists !")
-
         elif answer == "n":
-            if recursion():
-                return #Vrati zpoctene pole
+            if recursion(n_rows,n_columns,y_x_tuples,used_coordinates):
+                print("Answer exists")
+                break
             else:
                 print("No solutions exists !")
         else:
             print("Invalid input!")
+            print(start_field)
             continue
         break
 
